@@ -1,0 +1,14 @@
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\bin\Debug\netcoreapp2.2\RestApp.deps.json
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\bin\Debug\netcoreapp2.2\RestApp.runtimeconfig.json
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\bin\Debug\netcoreapp2.2\RestApp.runtimeconfig.dev.json
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\bin\Debug\netcoreapp2.2\RestApp.dll
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\bin\Debug\netcoreapp2.2\RestApp.pdb
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.csprojAssemblyReference.cache
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.csproj.CoreCompileInputs.cache
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.RazorAssemblyInfo.cache
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.RazorAssemblyInfo.cs
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.AssemblyInfoInputs.cache
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.AssemblyInfo.cs
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.RazorTargetAssemblyInfo.cache
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.dll
+C:\Users\Treinamento 5\Desktop\Restful-Project\RestApp\obj\Debug\netcoreapp2.2\RestApp.pdb
