@@ -1,65 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using RestApp.Model;
-using RestApp.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using RestApp.Business;
+using RestApp.Data.VO;
+using Tapioca.HATEOAS;
 
 namespace RestApp.Controllers
 {
-    
+  
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonsController : Controller
     {
-        private IPersonRepository PersonBusiness;
-       
-        public PersonsController(IPersonRepository personService)
+        //Declaração do serviço usado
+        private IPersonBusiness _personBusiness;
+
+        /* Injeção de uma instancia de IPersonBusiness ao criar
+        uma instancia de PersonController */
+        public PersonsController(IPersonBusiness personBusiness)
         {
-            PersonBusiness = personService;
-        }
-        // GET api/values
-        [HttpGet]
-        public ActionResult Get()
-        {
-            return Ok(PersonBusiness.FindAll());
+            _personBusiness = personBusiness;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult Get(long id)
+        //Mapeia as requisições GET para http://localhost:{porta}/api/persons/v1/
+        //Get sem parâmetros para o FindAll --> Busca Todos
+        [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Get()
         {
-            var person = PersonBusiness.FindById(id);
+            return Ok(_personBusiness.FindAll());
+        }
+
+        //Mapeia as requisições GET para http://localhost:{porta}/api/persons/v1/{id}
+        //recebendo um ID como no Path da requisição
+        //Get com parâmetros para o FindById --> Busca Por ID
+        [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Get(long id)
+        {
+            var person = _personBusiness.FindById(id);
             if (person == null) return NotFound();
             return Ok(person);
         }
 
-        // POST api/values
+        //Mapeia as requisições POST para http://localhost:{porta}/api/persons/v1/
+        //O [FromBody] consome o Objeto JSON enviado no corpo da requisição
         [HttpPost]
-        public ActionResult Post([FromBody] Person person)
-        {
-            if (person == null) return NotFound();
-            return new ObjectResult(PersonBusiness.Create(person));
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public ActionResult Put([FromBody] Person person)
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Post([FromBody]PersonVO person)
         {
             if (person == null) return BadRequest();
-            var updatedPerson = PersonBusiness.Update(person);
-            if (updatedPerson == null) return BadRequest();
-
-            return new ObjectResult(PersonBusiness.Update(person));
-            
+            return new ObjectResult(_personBusiness.Create(person));
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        //Mapeia as requisições PUT para http://localhost:{porta}/api/persons/v1/
+        //O [FromBody] consome o Objeto JSON enviado no corpo da requisição
+        [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Put([FromBody]PersonVO person)
         {
-            PersonBusiness.Delete(id);
+            if (person == null) return BadRequest();
+            var updatedPerson = _personBusiness.Update(person);
+            if (updatedPerson == null) return BadRequest();
+            return new ObjectResult(updatedPerson);
+        }
+
+
+        //Mapeia as requisições DELETE para http://localhost:{porta}/api/persons/v1/{id}
+        //recebendo um ID como no Path da requisição
+        [HttpDelete("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Delete(int id)
+        {
+            _personBusiness.Delete(id);
             return NoContent();
         }
     }

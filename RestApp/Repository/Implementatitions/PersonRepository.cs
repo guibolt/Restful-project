@@ -5,6 +5,7 @@ using System.Threading;
 
 using RestApp.Model;
 using RestApp.Model.Context;
+using RestApp.Repository.Implementatitions;
 
 namespace RestApp.Services.Implementatitions.Repository
 {
@@ -45,6 +46,11 @@ namespace RestApp.Services.Implementatitions.Repository
             }
         }
 
+        public bool Exists(long? id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Person> FindAll()
         {
             return Context.Persons.ToList();
@@ -74,12 +80,6 @@ namespace RestApp.Services.Implementatitions.Repository
             return person;
         }
 
-        public bool Exists(long? id)
-        {
-            return Context.Persons.Any(p => p.Id.Equals(id));
-        }
-
-        
     }
 
 

@@ -43,13 +43,17 @@
           "dependencies": {
             "Evolve": {
               "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[1.8.0, )"
             },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.2.0, )",
               "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Mvc.Formatters.Json": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.AspNetCore.Mvc.Versioning": {
               "target": "Package",
@@ -73,6 +77,14 @@
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Tapioca.HATEOAS": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             }
           },
           "imports": [

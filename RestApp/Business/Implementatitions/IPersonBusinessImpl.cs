@@ -1,5 +1,9 @@
-﻿using RestApp.Model;
+﻿using RestApp.Data.Converters;
+using RestApp.Data.VO;
+using RestApp.Model;
 using RestApp.Model.Context;
+using RestApp.Repository.Generic;
+using RestApp.Repository.Implementatitions;
 using RestApp.Services;
 using System;
 using System.Collections.Generic;
@@ -10,44 +14,51 @@ namespace RestApp.Business.Implementatitions
 {
     public class PersonBusinessImpl : IPersonBusiness
     {
-        private  IPersonRepository Reposiotory;
 
-        public PersonBusinessImpl(IPersonRepository repository)
-        {
-            Reposiotory = repository;
-        }
-        public Person Create(Person person)
-        {
+        private IRepository<Person> _repository;
 
-            return Reposiotory.Create(person);
+        private readonly PersonConverter _converter;
+
+        public PersonBusinessImpl(IRepository<Person> repository)
+        {
+            _repository = repository;
+            _converter = new PersonConverter();
         }
+
+        public PersonVO Create(PersonVO person)
+        {
+            var personEntity = _converter.Parse(person);
+            personEntity = _repository.Create(personEntity);
+            return _converter.Parse(personEntity);
+        }
+
+        public PersonVO FindById(long id)
+        {
+            return _converter.Parse(_repository.FindById(id));
+        }
+
+        public List<PersonVO> FindAll()
+        {
+            return _converter.ParseList(_repository.FindAll());
+        }
+
+        public PersonVO Update(PersonVO person)
+        {
+            var personEntity = _converter.Parse(person);
+            personEntity = _repository.Update(personEntity);
+            return _converter.Parse(personEntity);
+        }
+
         public void Delete(long id)
         {
-
-            Reposiotory.Delete(id);
-        }
-
-        public List<Person> FindAll()
-        {
-            return Reposiotory.FindAll();
-
-        }
-
-        public Person FindById(long id)
-        {
-            return Reposiotory.FindById(id);
-        }
-
-        public Person Update(Person person)
-        {
-
-            return Reposiotory.Update(person);
+            _repository.Delete(id);
         }
 
         public bool Exists(long id)
         {
-            return Reposiotory.Exists(id);
+            return _repository.Exists(id);
         }
-       
     }
+
 }
+
