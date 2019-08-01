@@ -14,7 +14,8 @@ namespace RestApp.Repository.Generic
         List<T> FindAll();
         T Update(T item);
         void Delete(long id);
-
+        int GetCount(string query);
         bool Exists(long? id);
+        List<T> FindWithPagedSearch(string g);
     }
 }

@@ -5,82 +5,38 @@ using System.Threading;
 
 using RestApp.Model;
 using RestApp.Model.Context;
+using RestApp.Repository.Generic;
 using RestApp.Repository.Implementatitions;
 
 namespace RestApp.Services.Implementatitions.Repository
 {
-    public class PersonRepository : IPersonRepository
+
+    public class PersonRepository : GenericRepository<Person> ,IPersonRepository
     {
-        private readonly MySQLContext Context;
-        public PersonRepository(MySQLContext context)
+
+        public PersonRepository(MySQLContext context):base(context)
         {
-            Context = context;
+          
         }
-        public Person Create(Person person)
+        public List<Person> FindByName(string firstName, string lastName)
         {
-            try
+            if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
-                Context.Add(person);
-                Context.SaveChanges();
+                return _context.Persons.Where(p => p.FirstName.Contains(firstName) && p.LastName.Contains(lastName)).ToList();
             }
-            catch (Exception ex)
+            else if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
-
-                throw ex;
+                return _context.Persons.Where(p => p.LastName.Contains(lastName)).ToList();
             }
-            return person;
-        }
-        public void Delete(long id)
-        {
-
-            var result = Context.Persons.SingleOrDefault(p => p.Id.Equals(id));
-            try
+            else if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
             {
-                if (result != null) Context.Persons.Remove(result);
-                Context.SaveChanges();
+                return _context.Persons.Where(p => p.FirstName.Contains(firstName)).ToList();
             }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            return _context.Persons.ToList();
         }
-
-        public bool Exists(long? id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Person> FindAll()
-        {
-            return Context.Persons.ToList();
-
-        }
-
-        public Person FindById(long id)
-        {
-            return Context.Persons.SingleOrDefault(p => p.Id.Equals(id));
-        }
-
-        public Person Update(Person person)
-        {
-            if (!Exists(person.Id)) return null;
-
-            var result = Context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
-            try
-            {
-                Context.Entry(result).CurrentValues.SetValues(person);
-                Context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            return person;
-        }
-
     }
+
+
 
 
 

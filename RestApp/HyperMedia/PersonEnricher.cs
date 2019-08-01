@@ -15,6 +15,15 @@ namespace RestApp.HyperMedia
             var path = "api/persons/v1";
             var url = new { controller = path, id = content.Id };
 
+            //var dasd = new HyperMediaLink();
+
+            //dasd.Action = HttpActionVerb.GET;
+            //dasd.Href = urlHelper.Link("DefaultApi", url);
+            //dasd.Rel = RelationType.self;
+            //dasd.Type = ResponseTypeFormat.DefaultGet;
+
+            //content.Links.Add(dasd);
+
             content.Links.Add(new HyperMediaLink()
             {
                 Action = HttpActionVerb.GET,

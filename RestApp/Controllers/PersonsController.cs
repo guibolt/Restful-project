@@ -1,11 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestApp.Business;
 using RestApp.Data.VO;
+using System.Collections.Generic;
 using Tapioca.HATEOAS;
+
+
 
 namespace RestApp.Controllers
 {
-  
+    /* Mapeia as requisições de http://localhost:{porta}/api/persons/v1/
+    Por padrão o ASP.NET Core mapeia todas as classes que extendem Controller
+    pegando a primeira parte do nome da classe em lower case [Person]Controller
+    e expõe como endpoint REST
+    */
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonsController : Controller
@@ -20,54 +28,139 @@ namespace RestApp.Controllers
             _personBusiness = personBusiness;
         }
 
-        //Mapeia as requisições GET para http://localhost:{porta}/api/persons/v1/
-        //Get sem parâmetros para o FindAll --> Busca Todos
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/
+        // [SwaggerResponse((202), Type = typeof(List<Person>))]
+        // determina o objeto de retorno em caso de sucesso List<Person>
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 204, 400 e 401
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
-            return Ok(_personBusiness.FindAll());
+            return new OkObjectResult(_personBusiness.FindAll());
         }
 
-        //Mapeia as requisições GET para http://localhost:{porta}/api/persons/v1/{id}
-        //recebendo um ID como no Path da requisição
-        //Get com parâmetros para o FindById --> Busca Por ID
+
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/
+        // [SwaggerResponse((202), Type = typeof(List<Person>))]
+        // determina o objeto de retorno em caso de sucesso List<Person>
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 204, 400 e 401
+        [HttpGet("find-by-name")]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult GetByName([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            return new OkObjectResult(_personBusiness.FindByName(firstName, lastName));
+        }
+
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/{id}
+        // [SwaggerResponse((202), Type = typeof(Person))]
+        // determina o objeto de retorno em caso de sucesso Person
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 204, 400 e 401
+        [HttpGet("find-with-paged-search/{sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
+        [TypeFilter(typeof(HyperMediaFilter))] public IActionResult GetPagedSearch([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            return new OkObjectResult(_personBusiness.FindByName(firstName, lastName));
+        }
+
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/{id}
+        // [SwaggerResponse((202), Type = typeof(Person))]
+        // determina o objeto de retorno em caso de sucesso Person
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 204, 400 e 401
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
             if (person == null) return NotFound();
-            return Ok(person);
+            return new OkObjectResult(person);
         }
 
-        //Mapeia as requisições POST para http://localhost:{porta}/api/persons/v1/
-        //O [FromBody] consome o Objeto JSON enviado no corpo da requisição
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/
+        // [SwaggerResponse((202), Type = typeof(Person))]
+        // determina o objeto de retorno em caso de sucesso Person
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 400 e 401
         [HttpPost]
+        [ProducesResponseType((201), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody]PersonVO person)
         {
             if (person == null) return BadRequest();
-            return new ObjectResult(_personBusiness.Create(person));
+            return new OkObjectResult(_personBusiness.Create(person));
         }
 
-        //Mapeia as requisições PUT para http://localhost:{porta}/api/persons/v1/
-        //O [FromBody] consome o Objeto JSON enviado no corpo da requisição
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/
+        // determina o objeto de retorno em caso de sucesso Person
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 400 e 401
         [HttpPut]
+        [ProducesResponseType((202), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody]PersonVO person)
         {
             if (person == null) return BadRequest();
             var updatedPerson = _personBusiness.Update(person);
             if (updatedPerson == null) return BadRequest();
-            return new ObjectResult(updatedPerson);
+            return new OkObjectResult(updatedPerson);
         }
 
 
-        //Mapeia as requisições DELETE para http://localhost:{porta}/api/persons/v1/{id}
-        //recebendo um ID como no Path da requisição
-        [HttpDelete("{id}")]
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/
+        // determina o objeto de retorno em caso de sucesso Person
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 400 e 401
+        [HttpPatch]
+        [ProducesResponseType((202), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize("Bearer")]
         [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Patch([FromBody]PersonVO person)
+        {
+            if (person == null) return BadRequest();
+            var updatedPerson = _personBusiness.Update(person);
+            if (updatedPerson == null) return BadRequest();
+            return new OkObjectResult(updatedPerson);
+        }
+
+        // Configura o Swagger para a operação
+        // http://localhost:{porta}/api/persons/v1/{id}
+        // O [SwaggerResponse(XYZ)] define os códigos de retorno 400 e 401
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        [Authorize("Bearer")]
         public IActionResult Delete(int id)
         {
             _personBusiness.Delete(id);
