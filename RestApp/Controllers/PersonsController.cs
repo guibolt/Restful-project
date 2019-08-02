@@ -74,9 +74,9 @@ namespace RestApp.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [Authorize("Bearer")]
-        [TypeFilter(typeof(HyperMediaFilter))] public IActionResult GetPagedSearch([FromQuery] string firstName, [FromQuery] string lastName)
+        [TypeFilter(typeof(HyperMediaFilter))] public IActionResult GetPagedSearch([FromQuery]string name, [FromQuery] string sortDirection, [FromQuery] int pageSize, [FromQuery] int page)
         {
-            return new OkObjectResult(_personBusiness.FindByName(firstName, lastName));
+            return new OkObjectResult(_personBusiness.FindByName(name, sortDirection, pageSize, page));
         }
 
         // Configura o Swagger para a operação
