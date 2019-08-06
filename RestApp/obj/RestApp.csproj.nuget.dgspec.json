@@ -70,6 +70,10 @@
               "version": "[2.2.0, )",
               "autoReferenced": true
             },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.7.12, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.17, )"

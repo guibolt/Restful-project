@@ -19,6 +19,7 @@ using RestApp.Repository.Generic;
 using RestApp.Repository.Implementatitions;
 using RestApp.Security.Configuration;
 using RestApp.Services.Implementatitions.Repository;
+using RestWithASPNETUdemy.Business.Implementattions;
 using Swashbuckle.AspNetCore.Swagger;
 using Tapioca.HATEOAS;
 
@@ -129,6 +130,8 @@ namespace RestApp
             services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
             services.AddScoped<IBookBusiness, BookBusinessImpl>();
             services.AddScoped<ILoginBusiness, LoginBusinessImpl>();
+
+            services.AddScoped<IFileBusiness,FileBusinessImpl>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();

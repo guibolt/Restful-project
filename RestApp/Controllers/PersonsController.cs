@@ -64,21 +64,21 @@ namespace RestApp.Controllers
         }
 
         // Configura o Swagger para a operação
-        // http://localhost:{porta}/api/persons/v1/{id}
-        // [SwaggerResponse((202), Type = typeof(Person))]
-        // determina o objeto de retorno em caso de sucesso Person
+        // http://localhost:{porta}/api/persons/v1/
+        // [SwaggerResponse((202), Type = typeof(List<Person>))]
+        // determina o objeto de retorno em caso de sucesso List<Person>
         // O [SwaggerResponse(XYZ)] define os códigos de retorno 204, 400 e 401
         [HttpGet("find-with-paged-search/{sortDirection}/{pageSize}/{page}")]
-        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [Authorize("Bearer")]
-        [TypeFilter(typeof(HyperMediaFilter))] public IActionResult GetPagedSearch([FromQuery]string name, [FromQuery] string sortDirection, [FromQuery] int pageSize, [FromQuery] int page)
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult GetPagedSearch([FromQuery] string name, string sortDirection, int pageSize, int page)
         {
-            return new OkObjectResult(_personBusiness.FindByName(name, sortDirection, pageSize, page));
+            return new OkObjectResult(_personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page));
         }
-
         // Configura o Swagger para a operação
         // http://localhost:{porta}/api/persons/v1/{id}
         // [SwaggerResponse((202), Type = typeof(Person))]

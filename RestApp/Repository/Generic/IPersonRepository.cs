@@ -1,4 +1,5 @@
-﻿using RestApp.Model;
+﻿using RestApp.Data.VO;
+using RestApp.Model;
 using RestApp.Model.Base;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,5 @@ namespace RestApp.Repository.Generic
     {
 
         List<Person> FindByName(string firstName, string lastName);
-   
     }
 }
